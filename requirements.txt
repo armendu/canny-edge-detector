@@ -1,0 +1,4 @@
+numpy
+logzero  # see github.com/metachris/logzero
+Pillow
+matplotlib
