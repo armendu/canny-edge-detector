@@ -13,6 +13,7 @@ from logzero import logger
 from PIL import Image
 import numpy as np
 from scipy import ndimage
+import matplotlib.image as mpimg
 
 
 def gaussian_kernel(size, sigma=1.0):
@@ -162,14 +163,23 @@ def main():
     """ Main entry point of the app """
     logger.info("Starting Canny Edge Detector")
 
+    img = mpimg.imread("lena.png") # Read the image
+
+    # Show original and transformed image
+    # fig, (ax1, ax2) = plt.subplots(1, 2)
+    # fig.suptitle('Canny edge detector')
+    # ax1.imshow(img, cmap='gray')
+    # ax2.imshow(final_img, cmap='gray')
+    # plt.show(block=True)
+
     # load the image
-    image = Image.open(os.path.join(sys.path[0], 'lena-colored.png'))
+    # image = Image.open(os.path.join(sys.path[0], 'lena.png'))
 
     # convert to greyscale
-    image = image.convert('L')
+    # image = image.convert('L')
 
     # convert image to numpy array
-    data = np.asarray(image)
+    data = np.asarray(img)
 
     # gaussian filter value
     gaussian_mask = gaussian_kernel(5, 1.4)
