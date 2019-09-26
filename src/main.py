@@ -2,11 +2,9 @@
 """
 Module Docstring
 """
-import os
-import sys
 
 __author__ = "Armend Ukehaxhaj"
-__version__ = "0.1.1"
+__version__ = "0.1.2"
 __license__ = "MIT"
 
 from logzero import logger
@@ -25,7 +23,7 @@ def gaussian_kernel(size, sigma=1.0):
 
 
 def convolve2d(image, kernel):
-    # This function which takes an image and a kernel 
+    # This function which takes an image and a kernel
     # and returns the convolution of them
     # Args:
     #   image: a numpy array of size [image_height, image_width].
@@ -160,10 +158,11 @@ def hysteresis(img):
 
 
 def main():
-    """ Main entry point of the app """
+    # Main starting point of the application
     logger.info("Starting Canny Edge Detector")
 
-    img = mpimg.imread("lena.png") # Read the image
+    # Read the image
+    img = mpimg.imread("../res/lena.png")
 
     # Show original and transformed image
     # fig, (ax1, ax2) = plt.subplots(1, 2)
@@ -206,5 +205,5 @@ def main():
 
 
 if __name__ == "__main__":
-    """ This is executed when run from the command line """
+    # Start the main function
     main()
