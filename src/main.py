@@ -8,10 +8,9 @@ __version__ = "0.1.2"
 __license__ = "MIT"
 
 from logzero import logger
-from PIL import Image
 import numpy as np
-from scipy import ndimage
 import matplotlib.image as mpimg
+import matplotlib.pyplot as plt
 
 
 def gaussian_kernel(size, sigma=1.0):
@@ -57,8 +56,8 @@ def sobel_filters(img):
     Kx = np.array([[-1, 0, 1], [-2, 0, 2], [-1, 0, 1]], np.float32)
     Ky = np.array([[1, 2, 1], [0, 0, 0], [-1, -2, -1]], np.float32)
 
-    Ix = ndimage.filters.convolve(img, Kx)
-    Iy = ndimage.filters.convolve(img, Ky)
+    Ix = convolve2d(img, Kx)
+    Iy = convolve2d(img, Ky)
 
     G = np.hypot(Ix, Iy)
     G = G / G.max() * 255
@@ -69,7 +68,7 @@ def sobel_filters(img):
 
 def non_max_suppression(img, d):
     M, N = img.shape
-    Z = np.zeros((M, N), dtype=np.int32)
+    zeros = np.zeros((M, N), dtype=np.int32)
     angle = d * 180. / np.pi
     angle[angle < 0] += 180
 
@@ -97,14 +96,14 @@ def non_max_suppression(img, d):
                     r = img[i + 1, j + 1]
 
                 if (img[i, j] >= q) and (img[i, j] >= r):
-                    Z[i, j] = img[i, j]
+                    zeros[i, j] = img[i, j]
                 else:
-                    Z[i, j] = 0
+                    zeros[i, j] = 0
 
             except IndexError as e:
                 pass
 
-    return Z
+    return zeros
 
 
 def threshold(img):
@@ -164,19 +163,6 @@ def main():
     # Read the image
     img = mpimg.imread("../res/lena.png")
 
-    # Show original and transformed image
-    # fig, (ax1, ax2) = plt.subplots(1, 2)
-    # fig.suptitle('Canny edge detector')
-    # ax1.imshow(img, cmap='gray')
-    # ax2.imshow(final_img, cmap='gray')
-    # plt.show(block=True)
-
-    # load the image
-    # image = Image.open(os.path.join(sys.path[0], 'lena.png'))
-
-    # convert to greyscale
-    # image = image.convert('L')
-
     # convert image to numpy array
     data = np.asarray(img)
 
@@ -196,12 +182,13 @@ def main():
     thresholdImg = threshold(nonMaxImg)
     img_final = hysteresis(thresholdImg)
 
-    # create Pillow image
-    image2 = Image.fromarray(img_final)
-
     logger.info("Convolution done, opening image")
 
-    image2.show()
+    fig, (ax1, ax2) = plt.subplots(1, 2)
+    fig.suptitle('Canny edge detector')
+    ax1.imshow(img, cmap='gray')
+    ax2.imshow(img_final, cmap='gray')
+    plt.show(block=True)
 
 
 if __name__ == "__main__":
